@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rutvi Patel — Finance × AI Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        rose: {DEFAULT: '#FF3E6C', soft: '#FF8FA8', blush: '#FFE4EC', deep: '#C0183D'},
+                        gold: {DEFAULT: '#E8B86D', light: '#FDF3E3', dark: '#A07828'},
+                        ink: {DEFAULT: '#0D0812', mid: '#2C1A28', light: '#5C3D54'},
+                        cream: {DEFAULT: '#FDF7F2', warm: '#F9EFE6'},
+                        glass: {DEFAULT: 'rgba(255,255,255,0.06)', border: 'rgba(255,255,255,0.12)'},
+                    },
+                    backgroundImage: {
+                        'hero-mesh': 'radial-gradient(at 20% 30%, #FF3E6C22 0px, transparent 50%), radial-gradient(at 80% 70%, #E8B86D22 0px, transparent 50%), radial-gradient(at 50% 10%, #C0183D18 0px, transparent 40%)',
+                        'card-shimmer': 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 20s linear infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {'0%,100%': {opacity: '0.6', transform: 'scale(1)'}, '50%': {opacity: '1', transform: 'scale(1.05)'}},
+                        float: {'0%,100%': {transform: 'translateY(0px)'}, '50%': {transform: 'translateY(-12px)'}},
+                    },
+                    boxShadow: {
+                        'glow-rose': '0 0 40px rgba(255,62,108,0.4), 0 0 80px rgba(255,62,108,0.15)',
+                        'glow-gold': '0 0 30px rgba(232,184,109,0.35)',
+                        'card': '0 8px 48px rgba(13,8,18,0.6), 0 1px 0 rgba(255,255,255,0.08) inset',
+                        'card-hover': '0 20px 80px rgba(255,62,108,0.25), 0 1px 0 rgba(255,255,255,0.12) inset',
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html {
+            background: #0D0812;
+            overflow-x: hidden
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0D0812;
+            color: #FDF7F2;
+            cursor: none;
+            overflow-x: hidden
+        }
+
+        /* CURSOR */
+        #cur-dot {
+            width: 6px;
+            height: 6px;
+            background: #FF3E6C;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform .08s
+        }
+
+        #cur-ring {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid rgba(255, 62, 108, 0.6);
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform .18s ease, width .25s, height .25s, border-color .2s
+        }
+
+        #cur-ring.big {
+            width: 64px;
+            height: 64px;
+            border-color: rgba(255, 62, 108, 0.25)
+        }
+
+        a, button, [data-hover] {
+            cursor: none
+        }
+
+        /* NOISE */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+            opacity: .5
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 3px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0D0812
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(#FF3E6C, #E8B86D);
+            border-radius: 99px
+        }
+
+        /* GRADIENT TEXT */
+        .grad-text {
+            background: linear-gradient(135deg, #FF3E6C 0%, #E8B86D 60%, #FF8FA8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .grad-text-gold {
+            background: linear-gradient(135deg, #E8B86D 0%, #FDF3E3 50%, #E8B86D 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        /* GLASS CARD */
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px)
+        }
+
+        .glass-rose {
+            background: rgba(255, 62, 108, 0.08);
+            border: 1px solid rgba(255, 62, 108, 0.2);
+            backdrop-filter: blur(20px)
+        }
+
+        /* MAGNETIC BUTTON */
+        .mag-btn {
+            position: relative;
+            overflow: hidden;
+            transition: transform .3s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        .mag-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #FF3E6C, #C0183D);
+            opacity: 0;
+            transition: opacity .3s;
+            z-index: -1
+        }
+
+        .mag-btn:hover {
+            transform: translateY(-2px)
+        }
+
+        .mag-btn:hover::before {
+            opacity: 1
+        }
+
+        /* MARQUEE */
+        .marquee-track {
+            display: flex;
+            gap: 3rem;
+            animation: marqueeScroll 18s linear infinite;
+            width: max-content
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused
+        }
+
+        @keyframes marqueeScroll {
+            0% {
+                transform: translateX(0)
+            }
+            100% {
+                transform: translateX(-50%)
+            }
+        }
+
+        /* SKILL TAG hover */
+        .skill-tag {
+            transition: all .3s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-4px) scale(1.05);
+            background: rgba(255, 62, 108, 0.15);
+            border-color: rgba(255, 62, 108, 0.5);
+            box-shadow: 0 8px 24px rgba(255, 62, 108, 0.2)
+        }
+
+        /* TIMELINE LINE */
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 0;
+            background: linear-gradient(to bottom, #FF3E6C, #E8B86D)
+        }
+
+        /* REVEAL STATES */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(60px)
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px)
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px)
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.85)
+        }
+
+        /* ORBIT */
+        @keyframes orbit {
+            0% {
+                transform: rotate(0deg) translateX(90px) rotate(0deg)
+            }
+            100% {
+                transform: rotate(360deg) translateX(90px) rotate(-360deg)
+            }
+        }
+
+        .orbit-item {
+            animation: orbit 8s linear infinite
+        }
+
+        .orbit-item:nth-child(2) {
+            animation-delay: -2.7s
+        }
+
+        .orbit-item:nth-child(3) {
+            animation-delay: -5.3s
+        }
+
+        /* COUNTER */
+        .counter-num {
+            font-variant-numeric: tabular-nums
+        }
+
+        /* MOBILE NAV */
+        #mob-menu {
+            transform: translateX(100%);
+            transition: transform .4s cubic-bezier(.76, 0, .24, 1)
+        }
+
+        #mob-menu.open {
+            transform: translateX(0)
+        }
+
+        /* HERO CHAR SPLIT */
+        .char {
+            display: inline-block;
+            will-change: transform, opacity
+        }
+
+        /* PROGRESS BAR */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #FF3E6C, #E8B86D);
+            z-index: 9000;
+            transform-origin: left;
+            transform: scaleX(0)
+        }
+
+        /* PARTICLE */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 4s ease-in-out infinite
+        }
+
+        @media (max-width: 768px) {
+            .orbit-item {
+                display: none
+            }
+
+            #cur-dot, #cur-ring {
+                display: none
+            }
+
+            body {
+                cursor: auto
+            }
+
+            a, button {
+                cursor: pointer
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress"></div>
+
+<!-- CURSOR -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-20">
+        <!-- LOGO -->
+        <a href="#home" class="flex items-center gap-3 group" data-hover>
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-rose to-gold flex items-center justify-center text-white font-display font-bold text-sm shadow-glow-rose">R</div>
+            <span class="font-display text-lg text-cream-DEFAULT tracking-wide">Rutvi<span class="grad-text">.</span></span>
+        </a>
+        <!-- DESKTOP LINKS -->
+        <ul class="hidden md:flex items-center gap-8">
+            <li><a href="#about" class="font-body text-sm font-light text-white/50 hover:text-rose transition-colors duration-200 tracking-widest uppercase text-xs" data-hover>About</a></li>
+            <li><a href="#skills" class="font-body text-sm font-light text-white/50 hover:text-rose transition-colors duration-200 tracking-widest uppercase text-xs" data-hover>Skills</a></li>
+            <li><a href="#ai" class="font-body text-sm font-light text-white/50 hover:text-rose transition-colors duration-200 tracking-widest uppercase text-xs" data-hover>AI Work</a></li>
+            <li><a href="#journey" class="font-body text-sm font-light text-white/50 hover:text-rose transition-colors duration-200 tracking-widest uppercase text-xs" data-hover>Journey</a></li>
+        </ul>
+        <!-- CTA -->
+        <div class="hidden md:flex items-center gap-4">
+            <a href="mailto:patelrutvi051@gmail.com" data-hover
+               class="mag-btn relative px-6 py-2.5 rounded-full border border-rose/40 text-xs tracking-widest uppercase font-mono text-rose hover:text-white transition-colors duration-300">
+                Hire Me ↗
+            </a>
+        </div>
+        <!-- HAMBURGER -->
+        <button id="ham-btn" class="md:hidden flex flex-col gap-1.5 p-2" data-hover>
+            <span class="w-5 h-px bg-white block transition-all duration-300" id="h1"></span>
+            <span class="w-5 h-px bg-white block transition-all duration-300" id="h2"></span>
+        </button>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mob-menu" class="fixed inset-0 z-40 flex flex-col justify-center items-center gap-8" style="background:rgba(13,8,18,0.98);backdrop-filter:blur(24px)">
+    <a href="#about" class="mob-link font-display text-4xl text-white/80 hover:text-rose transition-colors">About</a>
+    <a href="#skills" class="mob-link font-display text-4xl text-white/80 hover:text-rose transition-colors">Skills</a>
+    <a href="#ai" class="mob-link font-display text-4xl text-white/80 hover:text-rose transition-colors">AI Work</a>
+    <a href="#journey" class="mob-link font-display text-4xl text-white/80 hover:text-rose transition-colors">Journey</a>
+    <a href="mailto:patelrutvi051@gmail.com" class="mt-4 px-8 py-3 rounded-full border border-rose/50 text-rose font-mono text-sm tracking-widest uppercase">Hire Me ↗</a>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <!-- MESH BG -->
+    <div class="absolute inset-0 bg-hero-mesh"></div>
+    <!-- GRID LINES -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px);background-size:80px 80px"></div>
+
+    <!-- FLOATING PARTICLES -->
+    <div id="particles" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+
+    <!-- ORBIT RING -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] hidden lg:block" style="animation:spin-slow 20s linear infinite">
+        <div class="w-full h-full rounded-full border border-rose/10 absolute"></div>
+        <div class="orbit-item absolute top-1/2 left-1/2 w-3 h-3 -ml-1.5 -mt-1.5 rounded-full bg-rose/60" style="animation:orbit 10s linear infinite"></div>
+        <div class="orbit-item absolute top-1/2 left-1/2 w-2 h-2 -ml-1 -mt-1 rounded-full bg-gold" style="animation:orbit 10s linear infinite;animation-delay:-3.3s"></div>
+        <div class="orbit-item absolute top-1/2 left-1/2 w-1.5 h-1.5 -ml-0.75 -mt-0.75 rounded-full bg-white/60" style="animation:orbit 10s linear infinite;animation-delay:-6.7s"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full grid lg:grid-cols-2 gap-16 items-center">
+        <!-- LEFT CONTENT -->
+        <div>
+            <!-- EYEBROW -->
+            <div id="hero-tag" class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-rose mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose animate-pulse-glow block"></span>
+                <span class="font-mono text-xs tracking-[0.2em] text-rose uppercase">Finance × AI Creator</span>
+            </div>
+
+            <!-- TITLE -->
+            <div class="overflow-hidden mb-2">
+                <h1 id="hero-h1" class="font-display text-[clamp(3.5rem,8vw,7rem)] font-bold leading-[0.9] tracking-tight text-white">
+                    Rutvi
+                </h1>
+            </div>
+            <div class="overflow-hidden mb-8">
+                <h1 id="hero-h2" class="font-display text-[clamp(3.5rem,8vw,7rem)] font-bold leading-[0.9] tracking-tight italic grad-text">
+                    Patel
+                </h1>
+            </div>
+
+            <!-- SUBTEXT -->
+            <p id="hero-sub" class="font-body font-light text-lg text-white/50 leading-relaxed max-w-md mb-10">
+                M.Com graduate turned Accountant — and an AI content creator who turns prompts into pure visual magic. Where spreadsheets meet storytelling.
+            </p>
+
+            <!-- CTA ROW -->
+            <div id="hero-ctas" class="flex flex-wrap gap-4">
+                <a href="#ai" data-hover
+                   class="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-rose to-rose-deep text-white font-mono text-xs tracking-widest uppercase shadow-glow-rose hover:shadow-[0_0_60px_rgba(255,62,108,0.6)] transition-all duration-500 overflow-hidden">
+                    <span class="relative z-10">See AI Work</span>
+                    <span class="relative z-10 text-base transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-rose-deep to-rose opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </a>
+                <a href="mailto:patelrutvi051@gmail.com" data-hover
+                   class="inline-flex items-center gap-3 px-8 py-4 rounded-full glass border border-white/10 text-white/70 font-mono text-xs tracking-widest uppercase hover:border-rose/40 hover:text-white transition-all duration-300">
+                    Hire Me
+                </a>
+            </div>
+
+            <!-- STATS ROW -->
+            <div id="hero-stats" class="flex gap-10 mt-14 pt-10 border-t border-white/[0.06]">
+                <div>
+                    <div class="font-display text-3xl font-bold text-white counter-num" data-count="65">0</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] text-white/30 uppercase mt-1">Followers</div>
+                </div>
+                <div>
+                    <div class="font-display text-3xl font-bold text-white counter-num" data-count="2">0</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] text-white/30 uppercase mt-1">AI Pages</div>
+                </div>
+                <div>
+                    <div class="font-display text-3xl font-bold text-white">M.Com</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] text-white/30 uppercase mt-1">Graduate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT — IDENTITY CARD -->
+        <div id="hero-card-wrap" class="relative flex justify-center items-center">
+            <!-- GLOW -->
+            <div class="absolute w-72 h-72 rounded-full bg-rose/20 blur-3xl animate-pulse-glow"></div>
+
+            <!-- CARD -->
+            <div class="relative w-80 rounded-3xl glass shadow-card overflow-hidden" style="border:1px solid rgba(255,62,108,0.2)">
+                <!-- TOP GRADIENT BAR -->
+                <div class="h-1.5 w-full bg-gradient-to-r from-rose via-gold to-rose"></div>
+
+                <!-- HEADER -->
+                <div class="p-8 pb-0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="relative">
+                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose to-gold-dark flex items-center justify-center text-white font-display text-2xl font-bold shadow-glow-rose">R</div>
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#0D0812]"></div>
+                        </div>
+                        <div>
+                            <div class="font-display text-xl text-white font-semibold">Rutvi Patel</div>
+                            <div class="font-mono text-[10px] text-white/40 tracking-widest uppercase mt-0.5">Finance & AI Creator</div>
+                        </div>
+                    </div>
+
+                    <!-- ROLE TAGS -->
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase bg-rose/10 text-rose border border-rose/20">Accountant</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase bg-gold/10 text-gold border border-gold/20">AI Creator</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase bg-white/5 text-white/50 border border-white/10">Vadodara</span>
+                    </div>
+                </div>
+
+                <!-- DIVIDER -->
+                <div class="mx-8 h-px bg-white/5"></div>
+
+                <!-- TOOLS LIST -->
+                <div class="p-8 pt-6 space-y-3">
+                    <div class="font-mono text-[9px] text-white/25 tracking-[0.25em] uppercase mb-4">Current Stack</div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-sm">🤖</div>
+                        <span class="text-sm text-white/60 font-light">Gemini · ChatGPT · Claude AI</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-sm">📊</div>
+                        <span class="text-sm text-white/60 font-light">Tally · Excel · GSTR · ITR</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-sm">🎬</div>
+                        <span class="text-sm text-white/60 font-light">Reels · Prompts · AI Edits</span>
+                    </div>
+                </div>
+
+                <!-- BOTTOM GLOW LINE -->
+                <div class="h-px mx-8 mb-1 bg-gradient-to-r from-transparent via-rose/30 to-transparent"></div>
+                <div class="p-6 pt-4">
+                    <div class="text-[10px] font-mono text-white/20 tracking-widest text-center">patelrutvi051@gmail.com</div>
+                </div>
+            </div>
+
+            <!-- FLOATING PILL 1 -->
+            <div class="absolute -top-6 -right-4 glass px-4 py-2 rounded-full border border-white/10 flex items-center gap-2 animate-float" style="animation-delay:0s">
+                <span class="text-base">✨</span>
+                <span class="text-xs font-mono text-white/60">AI Reels Daily</span>
+            </div>
+            <!-- FLOATING PILL 2 -->
+            <div class="absolute -bottom-4 -left-4 glass px-4 py-2 rounded-full border border-rose/20 flex items-center gap-2 animate-float" style="animation-delay:2s">
+                <span class="text-base">💼</span>
+                <span class="text-xs font-mono text-rose/80">Open to Work</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCROLL HINT -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+        <span class="font-mono text-[9px] tracking-[0.3em] uppercase text-white/50">Scroll</span>
+        <div class="w-px h-10 bg-gradient-to-b from-white/40 to-transparent"></div>
+    </div>
+</section>
+
+<!-- ═══════════════ MARQUEE ═══════════════ -->
+<div class="relative py-5 overflow-hidden border-y border-white/[0.05]" style="background:rgba(255,62,108,0.04)">
+    <div class="marquee-track select-none">
+        <span class="font-display italic text-2xl grad-text">Finance</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">AI Creator</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl grad-text">M.Com Graduate</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">Prompt Engineer</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl grad-text">Tally Expert</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">Visual Storyteller</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl grad-text">Reels Creator</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">Vadodara, India</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <!-- DUPLICATE -->
+        <span class="font-display italic text-2xl grad-text">Finance</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">AI Creator</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl grad-text">M.Com Graduate</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">Prompt Engineer</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl grad-text">Tally Expert</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">Visual Storyteller</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl grad-text">Reels Creator</span><span class="font-mono text-white/20 text-sm">✦</span>
+        <span class="font-display italic text-2xl text-white/30">Vadodara, India</span><span class="font-mono text-white/20 text-sm">✦</span>
+    </div>
+</div>
+
+<!-- ═══════════════ ABOUT / DUAL IDENTITY ═══════════════ -->
+<section id="about" class="relative py-32 overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.025]" style="background-image:radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px);background-size:40px 40px"></div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <!-- SECTION LABEL -->
+        <div class="reveal-up flex items-center gap-4 mb-16">
+            <div class="h-px flex-1 bg-white/[0.06] max-w-16"></div>
+            <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-rose">01 — About</span>
+            <div class="h-px flex-1 bg-white/[0.06]"></div>
+        </div>
+
+        <!-- HEADING -->
+        <h2 class="reveal-up font-display text-[clamp(2.5rem,5vw,5rem)] font-bold text-white leading-tight mb-16 max-w-3xl">
+            Two worlds,<br/><span class="italic grad-text">one vision.</span>
+        </h2>
+
+        <!-- CARDS GRID -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- FINANCE CARD -->
+            <div class="dual-card reveal-left relative rounded-2xl p-8 overflow-hidden group cursor-none" style="background:rgba(232,184,109,0.04);border:1px solid rgba(232,184,109,0.12)" data-hover>
+                <div class="absolute top-0 right-0 w-48 h-48 bg-gold/5 rounded-full blur-2xl group-hover:bg-gold/10 transition-all duration-700"></div>
+                <div class="w-12 h-12 rounded-2xl bg-gold/10 border border-gold/20 flex items-center justify-center text-2xl mb-6">📊</div>
+                <div class="font-mono text-[9px] tracking-[0.3em] uppercase text-gold mb-3">Finance Professional</div>
+                <h3 class="font-display text-3xl font-semibold text-white mb-4 leading-tight">Numbers &<br/>Narratives</h3>
+                <p class="font-light text-white/40 text-sm leading-relaxed mb-8">Working as an Accountant at CA Bhargavi Shah's firm, filing GSTR returns, computing ITR, and keeping books impeccable in Tally — all from Vadodara.</p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <span class="text-gold text-base">→</span>
+                        <span class="text-sm text-white/50">GSTR Return Filing & ITR Computation</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <span class="text-gold text-base">→</span>
+                        <span class="text-sm text-white/50">Tally · Excel · Ledger Maintenance</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <span class="text-gold text-base">→</span>
+                        <span class="text-sm text-white/50">Financial Accounting · Taxation Basics</span>
+                    </div>
+                </div>
+                <!-- CORNER MARK -->
+                <div class="absolute bottom-8 right-8 font-display text-7xl font-bold text-gold/5 leading-none select-none">₹</div>
+            </div>
+
+            <!-- AI CREATOR CARD -->
+            <div class="dual-card reveal-right relative rounded-2xl p-8 overflow-hidden group cursor-none" style="background:rgba(255,62,108,0.04);border:1px solid rgba(255,62,108,0.12)" data-hover>
+                <div class="absolute top-0 right-0 w-48 h-48 bg-rose/5 rounded-full blur-2xl group-hover:bg-rose/10 transition-all duration-700"></div>
+                <div class="w-12 h-12 rounded-2xl bg-rose/10 border border-rose/20 flex items-center justify-center text-2xl mb-6">🤖</div>
+                <div class="font-mono text-[9px] tracking-[0.3em] uppercase text-rose mb-3">AI Content Creator</div>
+                <h3 class="font-display text-3xl font-semibold text-white mb-4 leading-tight">Prompts &<br/>Pixels</h3>
+                <p class="font-light text-white/40 text-sm leading-relaxed mb-8">Running <span class="text-rose/70">@ai_by_rutvi</span> and <span class="text-rose/70">@prompt_world.14</span> — sharing daily AI reels, transformation edits, and free prompts that help beginners dive into artificial intelligence.</p>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <span class="text-rose text-base">→</span>
+                        <span class="text-sm text-white/50">AI Image & Reel Generation</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <span class="text-rose text-base">→</span>
+                        <span class="text-sm text-white/50">Prompt Engineering & Daily Tips</span>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+                        <span class="text-rose text-base">→</span>
+                        <span class="text-sm text-white/50">Gemini · ChatGPT · AI Transformations</span>
+                    </div>
+                </div>
+                <div class="absolute bottom-8 right-8 font-display text-7xl font-bold text-rose/5 leading-none select-none">✦</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ SKILLS ═══════════════ -->
+<section id="skills" class="relative py-32 overflow-hidden" style="background:rgba(255,255,255,0.015)">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="reveal-up flex items-center gap-4 mb-16">
+            <div class="h-px flex-1 bg-white/[0.06] max-w-16"></div>
+            <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-rose">02 — Skills</span>
+            <div class="h-px flex-1 bg-white/[0.06]"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div>
+                <h2 class="reveal-up font-display text-[clamp(2.5rem,4vw,4.5rem)] font-bold text-white leading-tight mb-6">
+                    What I<br/><span class="italic grad-text">bring</span> to<br/>the table.
+                </h2>
+                <p class="reveal-up font-light text-white/40 text-base leading-relaxed max-w-sm">A rare combination of financial precision and creative AI fluency — equally comfortable with tax returns and text-to-image models.</p>
+            </div>
+
+            <!-- SKILL TAGS -->
+            <div class="reveal-right flex flex-wrap gap-3">
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>📒</span><span class="text-sm text-white/70 font-light">Tally Accounting</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>📊</span><span class="text-sm text-white/70 font-light">MS Excel</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>🧾</span><span class="text-sm text-white/70 font-light">GSTR Filing</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>📋</span><span class="text-sm text-white/70 font-light">ITR Computation</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>💡</span><span class="text-sm text-white/70 font-light">Financial Accounting</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>📁</span><span class="text-sm text-white/70 font-light">Ledger Maintenance</span>
+                </div>
+                <div class="skill-tag glass-rose px-4 py-2.5 rounded-xl flex items-center gap-2 cursor-default">
+                    <span>🤖</span><span class="text-sm text-rose/90 font-light">AI Tools</span>
+                </div>
+                <div class="skill-tag glass-rose px-4 py-2.5 rounded-xl flex items-center gap-2 cursor-default">
+                    <span>✨</span><span class="text-sm text-rose/90 font-light">Prompt Engineering</span>
+                </div>
+                <div class="skill-tag glass-rose px-4 py-2.5 rounded-xl flex items-center gap-2 cursor-default">
+                    <span>🎬</span><span class="text-sm text-rose/90 font-light">AI Reels Creation</span>
+                </div>
+                <div class="skill-tag glass-rose px-4 py-2.5 rounded-xl flex items-center gap-2 cursor-default">
+                    <span>📱</span><span class="text-sm text-rose/90 font-light">Instagram Growth</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>🔠</span><span class="text-sm text-white/70 font-light">Gujarati · Hindi · English</span>
+                </div>
+                <div class="skill-tag glass px-4 py-2.5 rounded-xl border border-white/[0.06] flex items-center gap-2 cursor-default">
+                    <span>🧩</span><span class="text-sm text-white/70 font-light">Problem Solving</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ AI WORK ═══════════════ -->
+<section id="ai" class="relative py-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="reveal-up flex items-center gap-4 mb-16">
+            <div class="h-px flex-1 bg-white/[0.06] max-w-16"></div>
+            <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-rose">03 — AI Work</span>
+            <div class="h-px flex-1 bg-white/[0.06]"></div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 items-start mb-6">
+            <h2 class="reveal-up font-display text-[clamp(2.5rem,4vw,4.5rem)] font-bold text-white leading-tight">
+                Creating<br/><span class="italic grad-text">magic</span><br/>with AI.
+            </h2>
+            <p class="reveal-up font-light text-white/40 text-base leading-relaxed self-end pb-2">From Radha Krishna divine series to royal portrait transformations, Chibi animations to magazine-cover edits — every reel is crafted to inspire.</p>
+        </div>
+
+        <!-- AI CARDS BENTO -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- LARGE CARD -->
+            <div class="ai-bento-card col-span-2 md:col-span-1 md:row-span-2 relative rounded-2xl overflow-hidden group cursor-none reveal-scale" style="min-height:340px;background:linear-gradient(135deg,rgba(255,62,108,0.15),rgba(192,24,61,0.05));border:1px solid rgba(255,62,108,0.15)" data-hover>
+                <div class="absolute inset-0 flex items-center justify-center text-8xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-700">🕉️</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                    <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-rose mb-2">@ai_by_rutvi</div>
+                    <div class="font-display text-xl font-semibold text-white">Radha Krishna<br/>Divine Series</div>
+                </div>
+                <div class="absolute top-4 right-4 w-8 h-8 rounded-full glass border border-white/10 flex items-center justify-center text-white/50 group-hover:text-white group-hover:border-rose/40 transition-all duration-300 text-sm">↗</div>
+            </div>
+
+            <div class="ai-bento-card relative rounded-2xl overflow-hidden group cursor-none reveal-up" style="min-height:160px;background:linear-gradient(135deg,rgba(232,184,109,0.12),rgba(232,184,109,0.03));border:1px solid rgba(232,184,109,0.15)" data-hover>
+                <div class="absolute inset-0 flex items-center justify-center text-6xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-700">👑</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <div class="font-mono text-[9px] tracking-[0.2em] uppercase text-gold mb-1">Portrait AI</div>
+                    <div class="font-display text-base font-semibold text-white">Royal Transformations</div>
+                </div>
+            </div>
+
+            <div class="ai-bento-card relative rounded-2xl overflow-hidden group cursor-none reveal-up" style="min-height:160px;background:linear-gradient(135deg,rgba(255,143,168,0.1),rgba(255,62,108,0.04));border:1px solid rgba(255,143,168,0.12)" data-hover>
+                <div class="absolute inset-0 flex items-center justify-center text-6xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-700">✨</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <div class="font-mono text-[9px] tracking-[0.2em] uppercase text-rose-soft mb-1">Google Gemini</div>
+                    <div class="font-display text-base font-semibold text-white">Magazine Looks</div>
+                </div>
+            </div>
+
+            <div class="ai-bento-card relative rounded-2xl overflow-hidden group cursor-none reveal-up" style="min-height:160px;background:linear-gradient(135deg,rgba(100,120,255,0.12),rgba(100,120,255,0.03));border:1px solid rgba(100,120,255,0.15)" data-hover>
+                <div class="absolute inset-0 flex items-center justify-center text-6xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-700">🎭</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <div class="font-mono text-[9px] tracking-[0.2em] uppercase text-indigo-300 mb-1">3D Animation</div>
+                    <div class="font-display text-base font-semibold text-white">Chibi Me</div>
+                </div>
+            </div>
+
+            <div class="ai-bento-card relative rounded-2xl overflow-hidden group cursor-none reveal-up" style="min-height:160px;background:linear-gradient(135deg,rgba(255,200,100,0.12),rgba(255,200,100,0.03));border:1px solid rgba(255,200,100,0.15)" data-hover>
+                <div class="absolute inset-0 flex items-center justify-center text-6xl opacity-20 group-hover:opacity-30 group-hover:scale-110 transition-all duration-700">💄</div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <div class="font-mono text-[9px] tracking-[0.2em] uppercase text-yellow-300 mb-1">Beauty AI</div>
+                    <div class="font-display text-base font-semibold text-white">Soft Matte Edits</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ JOURNEY TIMELINE ═══════════════ -->
+<section id="journey" class="relative py-32" style="background:rgba(255,255,255,0.012)">
+    <div class="max-w-5xl mx-auto px-6 md:px-12">
+        <div class="reveal-up flex items-center gap-4 mb-16">
+            <div class="h-px flex-1 bg-white/[0.06] max-w-16"></div>
+            <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-rose">04 — Journey</span>
+            <div class="h-px flex-1 bg-white/[0.06]"></div>
+        </div>
+
+        <h2 class="reveal-up font-display text-[clamp(2.5rem,4vw,4.5rem)] font-bold text-white leading-tight mb-16">
+            The path<br/><span class="italic grad-text">so far.</span>
+        </h2>
+
+        <!-- TIMELINE -->
+        <div class="relative pl-8 md:pl-12">
+            <!-- VERTICAL LINE -->
+            <div class="absolute left-0 top-0 bottom-0 w-px bg-white/[0.06]">
+                <div id="tl-line" class="timeline-line w-full rounded-full"></div>
+            </div>
+
+            <!-- ITEM 1 -->
+            <div class="tl-item reveal-up relative pb-16">
+                <div class="absolute -left-8 md:-left-12 top-0 w-px h-full">
+                    <div class="absolute -left-2.5 top-0 w-5 h-5 rounded-full border-2 border-rose bg-[#0D0812] shadow-glow-rose"></div>
+                </div>
+                <div class="glass rounded-2xl p-6 md:p-8 border border-white/[0.06] hover:border-rose/20 transition-all duration-500 group">
+                    <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+                        <div>
+                            <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-rose mb-2">Nov 2025 — Present</div>
+                            <h3 class="font-display text-2xl font-semibold text-white">Accountant</h3>
+                            <p class="text-white/40 text-sm mt-1">CA Bhargavi Shah · Vadodara, Gujarat</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-rose/10 border border-rose/20 flex items-center justify-center text-xl">💼</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-rose/8 text-rose/80 border border-rose/15">GSTR Return Filing</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-rose/8 text-rose/80 border border-rose/15">ITR Computation</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-rose/8 text-rose/80 border border-rose/15">Tally Software</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-rose/8 text-rose/80 border border-rose/15">Excel Reporting</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ITEM 2 -->
+            <div class="tl-item reveal-up relative pb-16">
+                <div class="absolute -left-8 md:-left-12 top-0">
+                    <div class="absolute -left-2.5 top-0 w-5 h-5 rounded-full border-2 border-gold bg-[#0D0812] shadow-glow-gold"></div>
+                </div>
+                <div class="glass rounded-2xl p-6 md:p-8 border border-white/[0.06] hover:border-gold/20 transition-all duration-500">
+                    <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+                        <div>
+                            <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-gold mb-2">Aug 2023 — Apr 2025</div>
+                            <h3 class="font-display text-2xl font-semibold text-white">Master of Commerce</h3>
+                            <p class="text-white/40 text-sm mt-1">Veer Narmad South Gujarat University</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center text-xl">🎓</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-gold/8 text-gold/80 border border-gold/15">M.Com Degree</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-gold/8 text-gold/80 border border-gold/15">Financial Accounting</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-gold/8 text-gold/80 border border-gold/15">Taxation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ITEM 3 -->
+            <div class="tl-item reveal-up relative">
+                <div class="absolute -left-8 md:-left-12 top-0">
+                    <div class="absolute -left-2.5 top-0 w-5 h-5 rounded-full border-2 border-white/30 bg-[#0D0812]"></div>
+                </div>
+                <div class="glass rounded-2xl p-6 md:p-8 border border-white/[0.06] hover:border-white/15 transition-all duration-500">
+                    <div class="flex flex-wrap items-start justify-between gap-4 mb-4">
+                        <div>
+                            <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 mb-2">Aug 2020 — Apr 2023</div>
+                            <h3 class="font-display text-2xl font-semibold text-white">Bachelor of Commerce</h3>
+                            <p class="text-white/40 text-sm mt-1">Veer Narmad South Gujarat University</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-xl">📚</div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-white/4 text-white/40 border border-white/8">B.Com Degree</span>
+                        <span class="px-3 py-1 rounded-full text-[10px] font-mono tracking-wide bg-white/4 text-white/40 border border-white/8">Commerce Foundation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ SOCIAL / CHANNELS ═══════════════ -->
+<section class="relative py-32 overflow-hidden">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-rose/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+        <div class="reveal-up flex items-center gap-4 mb-16">
+            <div class="h-px flex-1 bg-white/[0.06] max-w-16"></div>
+            <span class="font-mono text-[10px] tracking-[0.3em] uppercase text-rose">05 — Channels</span>
+            <div class="h-px flex-1 bg-white/[0.06]"></div>
+        </div>
+
+        <h2 class="reveal-up font-display text-[clamp(2.5rem,4vw,4.5rem)] font-bold text-white leading-tight mb-16">
+            Find me<br/><span class="italic grad-text">online.</span>
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-5">
+            <a href="https://www.instagram.com/_rutzz_.510_/" target="_blank" data-hover
+               class="social-link reveal-up group relative rounded-2xl p-7 overflow-hidden block no-underline" style="background:linear-gradient(135deg,rgba(252,176,69,0.08),rgba(253,29,29,0.08),rgba(131,58,180,0.08));border:1px solid rgba(255,255,255,0.08)">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/5 via-pink-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10">
+                    <div class="text-3xl mb-5">📸</div>
+                    <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-white/30 mb-2">Personal</div>
+                    <div class="font-display text-xl font-semibold text-white mb-1">@_rutzz_.510_</div>
+                    <p class="text-sm text-white/40 font-light leading-relaxed mt-3">Life, travels, fashion & moments that make me, me.</p>
+                    <div class="mt-5 inline-flex items-center gap-2 text-xs font-mono text-white/30 group-hover:text-white/70 transition-colors duration-300">Visit ↗</div>
+                </div>
+            </a>
+
+            <a href="https://www.instagram.com/ai_by_rutvi/" target="_blank" data-hover
+               class="social-link reveal-up group relative rounded-2xl p-7 overflow-hidden block no-underline" style="background:rgba(255,62,108,0.06);border:1px solid rgba(255,62,108,0.15)">
+                <div class="absolute inset-0 bg-rose/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-rose animate-pulse-glow"></div>
+                <div class="relative z-10">
+                    <div class="text-3xl mb-5">🤖</div>
+                    <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-rose mb-2">AI Creator</div>
+                    <div class="font-display text-xl font-semibold text-white mb-1">@ai_by_rutvi</div>
+                    <p class="text-sm text-white/40 font-light leading-relaxed mt-3">Daily AI reels, prompts & tutorials. Follow for daily AI magic.</p>
+                    <div class="mt-5 inline-flex items-center gap-2 text-xs font-mono text-rose/50 group-hover:text-rose transition-colors duration-300">Visit ↗</div>
+                </div>
+            </a>
+
+            <a href="https://www.instagram.com/prompt_world.14/" target="_blank" data-hover
+               class="social-link reveal-up group relative rounded-2xl p-7 overflow-hidden block no-underline" style="background:rgba(232,184,109,0.06);border:1px solid rgba(232,184,109,0.15)">
+                <div class="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="relative z-10">
+                    <div class="text-3xl mb-5">💡</div>
+                    <div class="font-mono text-[9px] tracking-[0.25em] uppercase text-gold mb-2">Prompts</div>
+                    <div class="font-display text-xl font-semibold text-white mb-1">@prompt_world.14</div>
+                    <p class="text-sm text-white/40 font-light leading-relaxed mt-3">Viral AI prompts + Telegram channel for free daily drops.</p>
+                    <div class="mt-5 inline-flex items-center gap-2 text-xs font-mono text-gold/50 group-hover:text-gold transition-colors duration-300">Visit ↗</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section class="relative py-32 overflow-hidden" style="background:rgba(255,255,255,0.012)">
+    <div class="absolute inset-0 bg-hero-mesh opacity-40"></div>
+    <div class="max-w-4xl mx-auto px-6 md:px-12 text-center relative z-10">
+        <div class="reveal-up font-mono text-[10px] tracking-[0.3em] uppercase text-rose mb-6">06 — Contact</div>
+        <h2 class="reveal-up font-display text-[clamp(3rem,7vw,6rem)] font-bold text-white leading-tight mb-8">
+            Let's build<br/>something<br/><span class="italic grad-text">together.</span>
+        </h2>
+        <p class="reveal-up font-light text-white/40 text-lg leading-relaxed mb-14 max-w-xl mx-auto">
+            Whether it's accounting work, AI collaboration, or just a conversation about prompts — I'd love to hear from you.
+        </p>
+
+        <!-- CONTACT PILLS -->
+        <div class="reveal-up flex flex-wrap justify-center gap-4">
+            <a href="mailto:patelrutvi051@gmail.com" data-hover
+               class="group inline-flex items-center gap-3 px-7 py-4 rounded-full glass border border-white/10 hover:border-rose/30 transition-all duration-400 no-underline">
+                <span class="text-base">📧</span>
+                <span class="font-mono text-xs text-white/50 group-hover:text-white tracking-wide transition-colors duration-300">patelrutvi051@gmail.com</span>
+            </a>
+            <a href="tel:+916353147774" data-hover
+               class="group inline-flex items-center gap-3 px-7 py-4 rounded-full glass border border-white/10 hover:border-rose/30 transition-all duration-400 no-underline">
+                <span class="text-base">📱</span>
+                <span class="font-mono text-xs text-white/50 group-hover:text-white tracking-wide transition-colors duration-300">+91 6353147774</span>
+            </a>
+            <div class="group inline-flex items-center gap-3 px-7 py-4 rounded-full glass border border-white/10">
+                <span class="text-base">📍</span>
+                <span class="font-mono text-xs text-white/50 tracking-wide">Luna, Vadodara, India</span>
+            </div>
+        </div>
+
+        <!-- BIG CTA -->
+        <div class="reveal-up mt-14">
+            <a href="mailto:patelrutvi051@gmail.com" data-hover
+               class="group relative inline-flex items-center gap-4 px-12 py-5 rounded-full bg-gradient-to-r from-rose to-rose-deep text-white font-mono text-sm tracking-widest uppercase shadow-glow-rose hover:shadow-[0_0_80px_rgba(255,62,108,0.5)] transition-all duration-500 overflow-hidden no-underline">
+                <span class="relative z-10">Start a Conversation</span>
+                <span class="relative z-10 text-xl transition-transform duration-400 group-hover:translate-x-2">→</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-rose-deep via-rose to-rose-soft opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="relative border-t border-white/[0.05]" style="background:rgba(13,8,18,0.98)">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-wrap items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-rose to-gold flex items-center justify-center text-white font-display font-bold text-xs shadow-glow-rose">R</div>
+            <span class="font-display text-white/60">Rutvi<span class="grad-text">.</span></span>
+        </div>
+        <div class="font-mono text-[10px] text-white/20 tracking-widest">© 2026 · FINANCE × AI · VADODARA</div>
+        <div class="flex items-center gap-6">
+            <a href="https://www.instagram.com/ai_by_rutvi/" class="font-mono text-[10px] text-white/25 hover:text-rose transition-colors tracking-widest uppercase" data-hover>AI Page</a>
+            <a href="https://www.instagram.com/prompt_world.14/" class="font-mono text-[10px] text-white/25 hover:text-rose transition-colors tracking-widest uppercase" data-hover>Prompts</a>
+            <a href="https://www.instagram.com/_rutzz_.510_/" class="font-mono text-[10px] text-white/25 hover:text-rose transition-colors tracking-widest uppercase" data-hover>Personal</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ── CURSOR ──────────────────────────────
+    const dot = document.getElementById('cur-dot');
+    const ring = document.getElementById('cur-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+        mx = e.clientX;
+        my = e.clientY;
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px'
+    });
+    (function lerp() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(lerp)
+    })();
+    document.querySelectorAll('[data-hover],a,button').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('big'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('big'));
+    });
+
+    // ── SCROLL PROGRESS ─────────────────────
+    const prog = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+        const s = document.documentElement;
+        const pct = s.scrollTop / (s.scrollHeight - s.clientHeight);
+        prog.style.transform = `scaleX(${pct})`;
+    });
+
+    // ── NAVBAR SCROLL ───────────────────────
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+            nav.style.background = 'rgba(13,8,18,0.92)';
+            nav.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+        } else {
+            nav.style.background = 'transparent';
+            nav.style.borderBottom = 'none';
+        }
+    });
+
+    // ── HAMBURGER ───────────────────────────
+    const hamBtn = document.getElementById('ham-btn');
+    const mobMenu = document.getElementById('mob-menu');
+    const h1 = document.getElementById('h1'), h2 = document.getElementById('h2');
+    let menuOpen = false;
+    hamBtn.addEventListener('click', () => {
+        menuOpen = !menuOpen;
+        mobMenu.classList.toggle('open', menuOpen);
+        h1.style.transform = menuOpen ? 'rotate(45deg) translate(4px,4px)' : '';
+        h2.style.transform = menuOpen ? 'rotate(-45deg) translate(4px,-4px)' : '';
+    });
+    mobMenu.querySelectorAll('.mob-link').forEach(l => l.addEventListener('click', () => {
+        menuOpen = false;
+        mobMenu.classList.remove('open');
+        h1.style.transform = '';
+        h2.style.transform = ''
+    }));
+
+    // ── PARTICLES ───────────────────────────
+    const pWrap = document.getElementById('particles');
+    for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        const size = Math.random() * 3 + 1;
+        p.className = 'particle';
+        p.style.cssText = `
+    width:${size}px;height:${size}px;
+    left:${Math.random() * 100}%;top:${Math.random() * 100}%;
+    background:${Math.random() > 0.5 ? 'rgba(255,62,108,' : 'rgba(232,184,109,'}${0.2 + Math.random() * 0.4});
+    animation-delay:${Math.random() * 4}s;
+    animation-duration:${3 + Math.random() * 4}s;
+  `;
+        pWrap.appendChild(p);
+    }
+
+    // ── GSAP HERO ENTRANCE ──────────────────
+    const tl = gsap.timeline({delay: 0.2});
+    tl.from('#hero-tag', {y: 30, opacity: 0, duration: 0.7, ease: 'power3.out'})
+        .from('#hero-h1', {y: 80, opacity: 0, duration: 0.9, ease: 'power3.out'}, '-=0.3')
+        .from('#hero-h2', {y: 80, opacity: 0, duration: 0.9, ease: 'power3.out'}, '-=0.7')
+        .from('#hero-sub', {y: 30, opacity: 0, duration: 0.7, ease: 'power3.out'}, '-=0.4')
+        .from('#hero-ctas', {y: 30, opacity: 0, duration: 0.7, ease: 'power3.out'}, '-=0.3')
+        .from('#hero-stats', {y: 20, opacity: 0, duration: 0.6, ease: 'power3.out'}, '-=0.2')
+        .from('#hero-card-wrap', {x: 60, opacity: 0, duration: 1, ease: 'power3.out'}, '-=1.2');
+
+    // ── GSAP SCROLL REVEALS ─────────────────
+    gsap.utils.toArray('.reveal-up').forEach(el => {
+        gsap.fromTo(el, {y: 60, opacity: 0}, {
+            y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 88%', toggleActions: 'play none none none'}
+        });
+    });
+    gsap.utils.toArray('.reveal-left').forEach(el => {
+        gsap.fromTo(el, {x: -60, opacity: 0}, {
+            x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 85%', toggleActions: 'play none none none'}
+        });
+    });
+    gsap.utils.toArray('.reveal-right').forEach(el => {
+        gsap.fromTo(el, {x: 60, opacity: 0}, {
+            x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 85%', toggleActions: 'play none none none'}
+        });
+    });
+    gsap.utils.toArray('.reveal-scale').forEach(el => {
+        gsap.fromTo(el, {scale: 0.85, opacity: 0}, {
+            scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.4)',
+            scrollTrigger: {trigger: el, start: 'top 88%', toggleActions: 'play none none none'}
+        });
+    });
+
+    // ── DUAL CARDS STAGGER ─────────────────
+    gsap.utils.toArray('.dual-card').forEach((el, i) => {
+        gsap.fromTo(el, {y: 50, opacity: 0}, {
+            y: 0, opacity: 1, duration: 0.8, delay: i * 0.15, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 85%', toggleActions: 'play none none none'}
+        });
+    });
+
+    // ── AI BENTO STAGGER ─────────────────
+    gsap.utils.toArray('.ai-bento-card').forEach((el, i) => {
+        gsap.fromTo(el, {y: 40, opacity: 0}, {
+            y: 0, opacity: 1, duration: 0.7, delay: i * 0.1, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 90%', toggleActions: 'play none none none'}
+        });
+    });
+
+    // ── TIMELINE LINE DRAW ──────────────────
+    gsap.to('#tl-line', {
+        height: '100%', duration: 2, ease: 'power2.inOut',
+        scrollTrigger: {trigger: '#journey', start: 'top 70%', end: 'bottom 30%', scrub: 1}
+    });
+
+    gsap.utils.toArray('.tl-item').forEach((el, i) => {
+        gsap.fromTo(el, {x: -30, opacity: 0}, {
+            x: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 85%', toggleActions: 'play none none none'}
+        });
+    });
+
+    // ── SOCIAL LINK STAGGER ─────────────────
+    gsap.utils.toArray('.social-link').forEach((el, i) => {
+        gsap.fromTo(el, {y: 40, opacity: 0}, {
+            y: 0, opacity: 1, duration: 0.7, delay: i * 0.15, ease: 'power3.out',
+            scrollTrigger: {trigger: el, start: 'top 88%', toggleActions: 'play none none none'}
+        });
+    });
+
+    // ── COUNTER ANIMATION ───────────────────
+    document.querySelectorAll('.counter-num').forEach(el => {
+        const target = parseInt(el.dataset.count);
+        ScrollTrigger.create({
+            trigger: el, start: 'top 85%', once: true,
+            onEnter: () => {
+                gsap.fromTo({n: 0}, {n: target}, {
+                    duration: 1.5, ease: 'power2.out',
+                    onUpdate: function () {
+                        el.textContent = Math.round(this.targets()[0].n) + '+'
+                    }
+                });
+            }
+        });
+    });
+
+    // ── SKILL TAG STAGGER ───────────────────
+    gsap.from('.skill-tag', {
+        y: 20, opacity: 0, duration: 0.5, stagger: 0.06, ease: 'back.out(1.5)',
+        scrollTrigger: {trigger: '#skills', start: 'top 70%', toggleActions: 'play none none none'}
+    });
+
+    // ── PARALLAX HERO BG ────────────────────
+    gsap.to('.hero-bg-circle', {
+        yPercent: -30, ease: 'none',
+        scrollTrigger: {trigger: '#home', scrub: 1}
+    });
+
+    // ── CARD HOVER 3D TILT ──────────────────
+    document.querySelectorAll('.dual-card,.ai-bento-card,.social-link').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            gsap.to(card, {rotateY: x * 8, rotateX: -y * 6, transformPerspective: 800, duration: 0.3, ease: 'power2.out'});
+        });
+        card.addEventListener('mouseleave', () => {
+            gsap.to(card, {rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1,0.5)'});
+        });
+    });
+</script>
+</body>
+</html>
